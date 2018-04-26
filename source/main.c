@@ -34,17 +34,13 @@ void __appInit(void)
 
 int main(int argc, char **argv)
 {
-
-	/*Get the memory mapping for the PMC regs*/
-  u64 virt_addr = 0;
-  Result res = svcQueryIoMapping(&virt_addr, PMC_PHYS_ADDR, 0xC00);
-  if(res)
-    fatalSimple(MAKERESULT(222, 1337)); // error if we fail
-
-	u64 scratch0 = virt_addr + 0x50; //Scratch register 0 is at PMC base + 0x50
-
-	*(u32 *)scratch0 = 1 << 1; //Bit 1 set to 1 makes the SoC go into RCM
-	*(u32 *)virt_addr |= 1 << 4; //reboot without clearing scratch 0
-
-  while(1); //we should never reach here
+    /*Get the memory mapping for the PMC regs*/
+    u64 virt_addr = 0;
+    Result res = svcQueryIoMapping(&virt_addr, PMC_PHYS_ADDR, 0xC00);
+    if(res)
+        fatalSimple(MAKERESULT(222, 1337)); // error if we fail
+    u64 scratch0 = virt_addr + 0x50; //Scratch register 0 is at PMC base + 0x50
+    *(u32 *)scratch0 = 1 << 1; //Bit 1 set to 1 makes the SoC go into RCM
+    *(u32 *)virt_addr |= 1 << 4; //reboot without clearing scratch 0
+    while(1); //we should never reach here
 }
